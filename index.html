@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ukb-0-method-tmves-dt-v05 · The Protagonist Chain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+    <!-- Icons -->
+    <link rel="icon" href="https://abikesa.github.io/favicon/assets/favicon-light.ico" />
+    <link rel="icon" href="https://abikesa.github.io/favicon/assets/favicon-dark.ico"
+          media="(prefers-color-scheme: dark)" />
+
+    <!-- Logo preloads -->
+    <link rel="preload" href="https://abikesa.github.io/logos/assets/ukubona-light.png" as="image" />
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --border: #242424;
+    --text: #e8e4dc;
+    --muted: #888880;
+    --accent: #c8b89a;
+
+    --t: #e63946;
+    --m: #f4a261;
+    --v: #e9c46a;
+    --e: #2a9d8f;
+    --s: #6a8faf;
+
+    --strip-h: 4px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* ── ROYGBIV spectrum strip ── */
+  .spectrum {
+    height: var(--strip-h);
+    background: linear-gradient(to right,
+      var(--t) 0%, var(--t) 20%,
+      var(--m) 20%, var(--m) 40%,
+      var(--v) 40%, var(--v) 60%,
+      var(--e) 60%, var(--e) 80%,
+      var(--s) 80%, var(--s) 100%
+    );
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: var(--strip-h);
+    left: 0; right: 0;
+    padding: 1rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(13,13,13,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    z-index: 99;
+  }
+
+  .nav-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nav-code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── LAYOUT ── */
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 9rem 2.5rem 6rem;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    margin-bottom: 5rem;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: rise 0.9s ease forwards 0.2s;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.4rem;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 1.6rem;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  /* ── CHAIN DISPLAY ── */
+  .chain {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 4rem 0;
+    opacity: 0;
+    animation: rise 0.9s ease forwards 0.5s;
+  }
+
+  .chain-node {
+    flex: 1;
+    padding: 1.4rem 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    border-top: 3px solid transparent;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+
+  .chain-node:last-child { border-right: none; }
+
+  .chain-node:hover { background: #1a1a1a; }
+
+  .chain-node[data-node="T"] { border-top-color: var(--t); }
+  .chain-node[data-node="M"] { border-top-color: var(--m); }
+  .chain-node[data-node="V"] { border-top-color: var(--v); }
+  .chain-node[data-node="E"] { border-top-color: var(--e); }
+  .chain-node[data-node="S"] { border-top-color: var(--s); }
+
+  .node-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .chain-node[data-node="T"] .node-letter { color: var(--t); }
+  .chain-node[data-node="M"] .node-letter { color: var(--m); }
+  .chain-node[data-node="V"] .node-letter { color: var(--v); }
+  .chain-node[data-node="E"] .node-letter { color: var(--e); }
+  .chain-node[data-node="S"] .node-letter { color: var(--s); }
+
+  .node-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .node-role {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-bottom: 4.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .section.visible {
+    animation: rise 0.7s ease forwards;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.9rem;
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 1.2rem;
+    color: var(--text);
+  }
+
+  p {
+    color: #c8c4bc;
+    margin-bottom: 1.1rem;
+  }
+
+  /* ── NODE ENTRIES ── */
+  .node-entry {
+    border-left: 2px solid var(--border);
+    padding: 1.5rem 0 1.5rem 2rem;
+    margin-bottom: 0.2rem;
+    transition: border-color 0.2s;
+  }
+
+  .node-entry:hover { border-left-color: var(--accent); }
+
+  .node-entry-head {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .node-tag {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1;
+    min-width: 1.8rem;
+  }
+
+  .node-entry[data-n="T"] .node-tag { color: var(--t); }
+  .node-entry[data-n="M"] .node-tag { color: var(--m); }
+  .node-entry[data-n="V"] .node-tag { color: var(--v); }
+  .node-entry[data-n="E"] .node-tag { color: var(--e); }
+  .node-entry[data-n="S"] .node-tag { color: var(--s); }
+
+  .node-entry-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .node-entry p { margin-bottom: 0.5rem; }
+
+  .trio {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.3rem;
+    margin-top: 0.8rem;
+  }
+
+  .trio-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.7rem 0.8rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .trio-item strong {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+    font-weight: 400;
+  }
+
+  /* ── THESIS BLOCK ── */
+  .thesis {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 2rem 2.2rem;
+    margin: 3rem 0;
+  }
+
+  .thesis p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 0;
+  }
+
+  /* ── NIETZSCHE NOTE ── */
+  .note {
+    background: #111;
+    border: 1px solid var(--border);
+    padding: 1.4rem 1.8rem;
+    margin-top: 2rem;
+  }
+
+  .note-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .note p {
+    font-size: 0.92rem;
+    color: #aaa;
+    margin-bottom: 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 0 1rem;
+    margin-top: 5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--muted);
+  }
+
+  .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* ── ANIMATION ── */
+  @keyframes rise {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    main { padding: 8rem 1.4rem 4rem; }
+    nav { padding: 0.9rem 1.4rem; }
+    .chain { flex-direction: column; }
+    .chain-node { flex-direction: row; border-top: none; border-left: 3px solid transparent; border-bottom: 1px solid var(--border); }
+    .chain-node[data-node="T"] { border-left-color: var(--t); }
+    .chain-node[data-node="M"] { border-left-color: var(--m); }
+    .chain-node[data-node="V"] { border-left-color: var(--v); }
+    .chain-node[data-node="E"] { border-left-color: var(--e); }
+    .chain-node[data-node="S"] { border-left-color: var(--s); }
+    .trio { grid-template-columns: 1fr; }
+    footer { flex-direction: column; align-items: flex-start; }
+    .footer-meta { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<div class="spectrum"></div>
+
+<nav>
+  <span class="nav-brand">Ukubona LLC · Method Layer</span>
+  <span class="nav-code">ukb-0-method-tmves-dt-v05</span>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Scale 0 · Method · TMVES · v05</div>
+    <h1>Tensor → Matrix → Vector →<br/>Eigenmode → <em>Scalar</em></h1>
+    <p class="hero-sub">The pentadic chain describes not just clinical inference but the structure of any consequential life. Every protagonist in history was running the same five nodes.</p>
+  </div>
+
+  <!-- CHAIN -->
+  <div class="chain">
+    <div class="chain-node" data-node="T">
+      <span class="node-letter">T</span>
+      <span class="node-name">Tensor</span>
+      <span class="node-role">whence a<br/>protagonist emerges</span>
+    </div>
+    <div class="chain-node" data-node="M">
+      <span class="node-letter">M</span>
+      <span class="node-name">Matrix</span>
+      <span class="node-role">the<br/>constraints</span>
+    </div>
+    <div class="chain-node" data-node="V">
+      <span class="node-letter">V</span>
+      <span class="node-name">Vector</span>
+      <span class="node-role">the geodesic,<br/>aligned or not</span>
+    </div>
+    <div class="chain-node" data-node="E">
+      <span class="node-letter">E</span>
+      <span class="node-name">Eigenmode</span>
+      <span class="node-role">what doesn't<br/>change</span>
+    </div>
+    <div class="chain-node" data-node="S">
+      <span class="node-letter">S</span>
+      <span class="node-name">Scalar</span>
+      <span class="node-role">impact</span>
+    </div>
+  </div>
+
+  <!-- THESIS -->
+  <div class="thesis section">
+    <p>The pentadic chain aligns Einstein with Shakespeare as no one ever saw. Even Nietzsche has room — the will is very clear.</p>
+  </div>
+
+  <!-- THE FIVE NODES -->
+  <div class="section">
+    <div class="section-label" style="color: var(--muted);">The Five Nodes</div>
+    <h2>Each node. Three protagonists.</h2>
+
+    <div class="node-entry" data-n="T">
+      <div class="node-entry-head">
+        <span class="node-tag">T</span>
+        <span class="node-entry-title">The prior. What the protagonist inherits before they choose anything.</span>
+      </div>
+      <p>Genetics, epoch, culture, class. The tensor is fate before agency.</p>
+      <div class="trio">
+        <div class="trio-item"><strong>Einstein</strong>Born Ulm 1879. Jewish, German, the physics of a pre-relativistic world.</div>
+        <div class="trio-item"><strong>Shakespeare</strong>Born to a murdered king. The throne as poisoned inheritance.</div>
+        <div class="trio-item"><strong>Nietzsche</strong>Lutheran Prussia. A sick body. A father dead at five.</div>
+      </div>
+    </div>
+
+    <div class="node-entry" data-n="M">
+      <div class="node-entry-head">
+        <span class="node-tag">M</span>
+        <span class="node-entry-title">The compression. How they select what to measure, what to attend to.</span>
+      </div>
+      <p>The matrix is the PFC act of choosing a coordinate system. M is perspectivism formalized — simultaneously the study design question and the act of projecting the manifold into something navigable. M is where intelligence is designed.</p>
+      <div class="trio">
+        <div class="trio-item"><strong>Einstein</strong>The gedankenexperiment as study design. What would you see riding a beam of light?</div>
+        <div class="trio-item"><strong>Shakespeare</strong>The choice of which human contradiction to stage. Which compression of the human to put before an audience.</div>
+        <div class="trio-item"><strong>Nietzsche</strong>Perspectivism — literally. There is no view from nowhere. The matrix is always chosen.</div>
+      </div>
+    </div>
+
+    <div class="node-entry" data-n="V">
+      <div class="node-entry-head">
+        <span class="node-tag">V</span>
+        <span class="node-entry-title">The wall. What they couldn't access, what was hidden or forbidden.</span>
+      </div>
+      <p>The data behind the governance barrier. This is where most protagonists break.</p>
+      <div class="trio">
+        <div class="trio-item"><strong>Einstein</strong>The patent office obscurity. The academy closed. The data inaccessible by institution.</div>
+        <div class="trio-item"><strong>Shakespeare / Hamlet</strong>The inability to confirm the ghost. The V-node is unverifiable. Action is demanded anyway.</div>
+        <div class="trio-item"><strong>Nietzsche</strong>Isolation. His sister's betrayal of the manuscripts. The wall was inside his own reception.</div>
+      </div>
+    </div>
+
+    <div class="node-entry" data-n="E">
+      <div class="node-entry-head">
+        <span class="node-tag">E</span>
+        <span class="node-entry-title">The eigenmode. What doesn't change under transformation.</span>
+      </div>
+      <p>The invariant. Identity in the mathematical sense — not metaphor. Treatment must preserve the eigenmode. Gradient descent corrects the trajectory while keeping the patient's essential identity intact.</p>
+      <div class="trio">
+        <div class="trio-item"><strong>Einstein</strong>The conviction that the laws must be the same in all frames. The eigenmode is invariance itself.</div>
+        <div class="trio-item"><strong>Hamlet</strong>The inability to not be a philosopher even when action is demanded. The eigenmode survives every pressure to become otherwise.</div>
+        <div class="trio-item"><strong>Nietzsche</strong>The will to power as the attractor the system keeps returning to regardless of input. The eigenmode is what Ecce Homo names.</div>
+      </div>
+    </div>
+
+    <div class="node-entry" data-n="S">
+      <div class="node-entry-head">
+        <span class="node-tag">S</span>
+        <span class="node-entry-title">The scalar. The irreversible act.</span>
+      </div>
+      <p>One number, after everything. The loop closes. The prior updates. Don't reinvent the scalar once the eigenmode has resolved.</p>
+      <div class="trio">
+        <div class="trio-item"><strong>Einstein</strong>E = mc².</div>
+        <div class="trio-item"><strong>Shakespeare</strong>The final scene.</div>
+        <div class="trio-item"><strong>Nietzsche</strong>Ecce Homo.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NIETZSCHE NOTE -->
+  <div class="section">
+    <div class="section-label" style="color: var(--muted);">The Nietzsche Problem</div>
+    <div class="note">
+      <div class="note-label">Why Nietzsche saw it and couldn't operationalize it safely</div>
+      <p>The will to power is a gradient with no irreversibility constraint and no V-node governance. That is exactly the diagnostic. TMVES gives it the missing architecture: the V-node names the wall the will keeps crashing into, and η — the learning rate — governs how fast you can move on the geodesic without destroying what you are trying to preserve. Nietzsche had the gradient. He lacked the constraint. The chain supplies it.</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">Ukubona</div>
+    <div class="footer-meta">
+      ukb-0-method-tmves-dt-v05<br/>
+      Kampala, Uganda · 2026<br/>
+      geo → tmves → sib → eta → gap ↺
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  // scroll-reveal
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
